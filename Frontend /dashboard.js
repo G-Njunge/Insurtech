@@ -7,7 +7,10 @@ let currentHour = 17;
 const zoneMetricsById = new Map();
 
 document.addEventListener("DOMContentLoaded", () => {
-initializeDashboard();
+  const b = document.body;
+  if (b && b.classList.contains("page-dashboard")) {
+    initializeDashboard();
+  }
 });
 
 function initializeDashboard() {
@@ -479,4 +482,3 @@ return (n / 1000).toFixed(1) + "K";
 }
 return n.toString();
 }
-

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zone Risk Map · Insurtech</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+</head>
+<body class="page page-map">
+<header class="top-bar">
+<div class="top-bar-inner">
+<div class="logo-mark">Insurtech</div>
+<nav class="top-nav">
+<a href="index.html" class="top-link">Overview</a>
+<a href="dashboard.html" class="top-link">Dashboard</a>
+<a href="density.html" class="top-link">Density</a>
+<a href="revenue.html" class="top-link">Revenue</a>
+<span class="top-link active">Map</span>
+</nav>
+</div>
+</header>
+<main class="dashboard-main">
+<section class="panel-row map-row">
+<div class="panel map-panel">
+<div class="panel-header">
+<h2>Zone Risk Map</h2>
+<div class="panel-controls">
+<label class="slider-label">
+<span>Hour</span>
+<input id="hourSlider" type="range" min="0" max="23" value="17">
+<span id="hourLabel" class="slider-value">17:00</span>
+<span></span>
+</label>
+</div>
+</div>
+<div class="map-shell">
+<div id="map" class="map-view"></div>
+<div id="mapFallback" class="map-fallback hidden">GeoJSON map not available.</div>
+</div>
+</div>
+<div class="panel detail-panel">
+<div class="panel-header">
+<h2>Zone Detail</h2>
+<span class="panel-tag">/api/zone/&lt;zone_id&gt;?hour=H</span>
+</div>
+<div class="detail-body">
+<div class="detail-header">
+<div class="detail-title" id="detail-zone-name">Select a zone</div>
+<div class="detail-subtitle" id="detail-zone-borough"></div>
+</div>
+<div class="detail-grid">
+<div class="detail-item">
+<div class="detail-label">Trips per Hour</div>
+<div class="detail-value" id="detail-trips-per-hour">–</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Avg Trip Duration (min)</div>
+<div class="detail-value" id="detail-avg-duration">–</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Exposure Index</div>
+<div class="detail-value" id="detail-exposure-index">–</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Revenue Stability</div>
+<div class="detail-value" id="detail-revenue-stability">–</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Risk Score</div>
+<div class="detail-value accent" id="detail-risk-score">–</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="footer-inner">
+<span>Insurtech</span>
+<span>Group 7</span>
+</div>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="dashboard.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var slider = document.getElementById("hourSlider");
+  var label = document.getElementById("hourLabel");
+  if (slider && label && typeof formatHourLabel === "function") {
+    slider.addEventListener("input", function() {
+      var value = parseInt(slider.value, 10);
+      if (typeof currentHour !== "undefined") {
+        currentHour = value;
+      }
+      label.textContent = formatHourLabel(value);
+      if (typeof loadMapForHour === "function") {
+        loadMapForHour(value);
+      }
+    });
+    label.textContent = formatHourLabel(parseInt(slider.value || "17", 10));
+  }
+  if (typeof initializeMap === "function") {
+    initializeMap();
+  }
+});
+</script>
+</body>
+</html>

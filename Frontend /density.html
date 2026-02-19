@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hourly Trip Density · Insurtech</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+</head>
+<body class="page page-density">
+<header class="top-bar">
+<div class="top-bar-inner">
+<div class="logo-mark">Insurtech</div>
+<nav class="top-nav">
+<a href="index.html" class="top-link">Overview</a>
+<a href="dashboard.html" class="top-link">Dashboard</a>
+<span class="top-link active">Density</span>
+<a href="revenue.html" class="top-link">Revenue</a>
+<a href="map.html" class="top-link">Map</a>
+</nav>
+</div>
+</header>
+<main class="dashboard-main">
+<section class="panel-row">
+<div class="panel chart-panel">
+<div class="panel-header">
+<h2>Hourly Trip Density</h2>
+<span class="panel-tag">/api/map?hour=0..23</span>
+<span></span>
+</div>
+<div class="panel-body">
+<canvas id="densityChart"></canvas>
+<div class="panel-footnote">Sum of hourly trip_count across all zones.</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="footer-inner">
+<span>Insurtech</span>
+<span>Group 7</span>
+</div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="dashboard.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  if (typeof loadHourlyDensitySeries === "function") {
+    loadHourlyDensitySeries();
+  }
+});
+</script>
+</body>
+</html>
