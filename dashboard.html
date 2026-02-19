@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk Dashboard · NYC Mobility</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+<body class="page page-dashboard">
+<header class="top-bar">
+<div class="top-bar-inner">
+<div class="logo-mark">NYC Mobility Risk</div>
+<nav class="top-nav">
+<a href="index.html" class="top-link">Overview</a>
+<span class="top-link active">Dashboard</span>
+</nav>
+</div>
+</header>
+<main class="dashboard-main">
+<section class="panel-row">
+<div class="panel kpi-panel">
+<div class="panel-header">
+<h2>Exposure Overview</h2>
+<span class="panel-tag">API /api/overview</span>
+</div>
+<div class="kpi-grid">
+<div class="kpi-card">
+<div class="kpi-label">Total Trips</div>
+<div class="kpi-value" id="kpi-total-trips">–</div>
+<div class="kpi-caption">Processed in current sample window</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">High-Risk Zones</div>
+<div class="kpi-value" id="kpi-high-risk-zones">–</div>
+<div class="kpi-caption">Zones above risk threshold</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">Peak Exposure Hour</div>
+<div class="kpi-value" id="kpi-peak-hour">–</div>
+<div class="kpi-caption">Local time, 24h clock</div>
+</div>
+<div class="kpi-card">
+<div class="kpi-label">Revenue Volatility Score</div>
+<div class="kpi-value" id="kpi-revenue-volatility">–</div>
+<div class="kpi-caption">Portfolio-level volatility proxy</div>
+</div>
+</div>
+</div>
+<div class="panel chart-panel">
+<div class="panel-header">
+<h2>Hourly Trip Density</h2>
+<span class="panel-tag">Derived from /api/map?hour=H</span>
+</div>
+<div class="panel-body">
+<canvas id="densityChart"></canvas>
+<div class="panel-footnote">Density computed by summing hourly trip_count across all zones.</div>
+</div>
+</div>
+</section>
+<section class="panel-row map-row">
+<div class="panel map-panel">
+<div class="panel-header">
+<h2>Zone Risk Map</h2>
+<div class="panel-controls">
+<label class="slider-label">
+<span>Hour</span>
+<input id="hourSlider" type="range" min="0" max="23" value="17">
+<span id="hourLabel" class="slider-value">17:00</span>
+</label>
+</div>
+</div>
+<div class="map-shell">
+<div id="map" class="map-view"></div>
+<div id="mapFallback" class="map-fallback hidden">GeoJSON map data not yet available. Risk metrics still load and can be explored via the table.</div>
+</div>
+</div>
+<div class="panel detail-panel">
+<div class="panel-header">
+<h2>Zone Detail</h2>
+<span class="panel-tag">/api/zone/&lt;zone_id&gt;?hour=H</span>
+</div>
+<div class="detail-body">
+<div class="detail-header">
+<div class="detail-title" id="detail-zone-name">Select a zone</div>
+<div class="detail-subtitle" id="detail-zone-borough"></div>
+</div>
+<div class="detail-grid">
+<div class="detail-item">
+<div class="detail-label">Trips per Hour</div>
+<div class="detail-value" id="detail-trips-per-hour">–</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Avg Trip Duration (min)</div>
+<div class="detail-value" id="detail-avg-duration">–</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Exposure Index</div>
+<div class="detail-value" id="detail-exposure-index">–</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Revenue Stability</div>
+<div class="detail-value" id="detail-revenue-stability">–</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Risk Score</div>
+<div class="detail-value accent" id="detail-risk-score">–</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="panel-row">
+<div class="panel table-panel">
+<div class="panel-header">
+<h2>Top Risk Zones</h2>
+<span class="panel-tag">/api/top_zones?hour=H</span>
+</div>
+<div class="panel-body">
+<table class="data-table">
+<thead>
+<tr>
+<th>Zone</th>
+<th>Borough</th>
+<th>Risk Score</th>
+<th>Trip Count</th>
+<th>Exposure Score</th>
+</tr>
+</thead>
+<tbody id="topZonesBody">
+<tr>
+<td colspan="5">Waiting for data…</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="panel chart-panel">
+<div class="panel-header">
+<h2>Revenue Volatility by Zone</h2>
+<span class="panel-tag">/api/revenue</span>
+</div>
+<div class="panel-body">
+<canvas id="revenueChart"></canvas>
+<div class="panel-footnote">Volatility and stability scores are computed from trip-level revenue features.</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="footer-inner">
+<span>NYC Taxi Mobility Exposure · Risk Prototype</span>
+<span>Frontend wired to Flask API layer</span>
+</div>
+</footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="dashboard.js"></script>
+</body>
+</html>
+
