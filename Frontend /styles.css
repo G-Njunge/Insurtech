@@ -317,6 +317,19 @@ width: 100%;
 height: 260px;
 }
 
+
+/* Compact density chart: keep small and avoid stretching */
+.density-panel {
+  align-self: start;
+}
+.density-panel .panel-body {
+  flex: 0 0 auto;
+}
+#densityChart {
+  height: 180px;
+  max-height: 180px;
+  width: 2500px;
+}
 .panel-controls {
 display: flex;
 align-items: center;
