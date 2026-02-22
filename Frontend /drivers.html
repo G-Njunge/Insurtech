@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Driver Profiles · Insurtech</title>
+<title>Driver Risk Demo · Insurtech</title>
 <link rel="stylesheet" href="styles.css">
 </head>
 <body class="page page-drivers">
@@ -13,48 +14,107 @@
 <nav class="top-nav">
 <a href="index.html" class="top-link">Home</a>
 <a href="dashboard.html" class="top-link">Dashboard</a>
-<a href="map.html" class="top-link">Map</a>
 <span class="top-link active">Demo</span>
 </nav>
 </div>
 </header>
+
 <main class="dashboard-main">
-<section class="panel-row">
-<div class="panel">
+
+<!-- Lookup Form -->
+<section class="panel" style="max-width:720px;margin:0 auto;">
 <div class="panel-header">
-<h2>Driver Profiles</h2>
-<span class="panel-tag">Demo data</span>
+<h2>Check Your Risk Score</h2>
+<span class="panel-tag">POST /api/driver-risk</span>
 </div>
 <div class="panel-body">
-<div class="kpi-grid">
-<div class="kpi-card">
-<img src="https://picsum.photos/seed/driver1/96" alt="Driver" width="96" height="96" style="border-radius: 999px; object-fit: cover;">
-<div style="font-size: 0.8rem; color: #9ca3af;">ID</div>
-<div style="font-size: 1rem; font-weight: 500;">D-10231</div>
-<div style="font-size: 0.85rem; color: #e5e7eb; margin-top: 0.2rem;">On route to JFK</div>
+<p style="font-size:0.85rem;color:#9ca3af;margin-bottom:1rem;">
+Type in your Driver ID number to find out your risk score. It tells you how safe or risky your driving areas and hours are.
+</p>
+<form id="driverForm" autocomplete="off">
+<div class="form-group">
+<label class="form-label" for="driverId">Driver ID</label>
+<input class="form-input" type="number" id="driverId" placeholder="e.g. 1" required min="1">
 </div>
-<div class="kpi-card">
-<img src="https://picsum.photos/seed/driver2/96" alt="Driver" width="96" height="96" style="border-radius: 999px; object-fit: cover;">
-<div style="font-size: 0.8rem; color: #9ca3af;">ID</div>
-<div style="font-size: 1rem; font-weight: 500;">D-78412</div>
-<div style="font-size: 0.85rem; color: #e5e7eb; margin-top: 0.2rem;">Available in Midtown</div>
-</div>
-<div class="kpi-card">
-<img src="https://picsum.photos/seed/driver3/96" alt="Driver" width="96" height="96" style="border-radius: 999px; object-fit: cover;">
-<div style="font-size: 0.8rem; color: #9ca3af;">ID</div>
-<div style="font-size: 1rem; font-weight: 500;">D-45009</div>
-<div style="font-size: 0.85rem; color: #e5e7eb; margin-top: 0.2rem;">Break until 18:00</div>
-</div>
-</div>
-</div>
+<button class="primary-btn" type="submit" id="submitBtn" style="width:100%;margin-top:0.5rem;">
+Calculate Risk
+</button>
+</form>
+<div id="formError" class="form-error hidden"></div>
 </div>
 </section>
+
+<!-- Results (hidden until API responds) -->
+<section id="resultsSection" class="hidden">
+
+<!-- Personalized message -->
+<div class="panel" style="margin:0 auto;">
+<div class="panel-header">
+<h2 id="resultTitle">Your Risk Report</h2>
+<span class="panel-tag" id="riskBadge">—</span>
+</div>
+<div class="panel-body">
+<p id="personalizedMsg" style="font-size:0.95rem;color:#e5e7eb;line-height:1.6;"></p>
+</div>
+</div>
+
+<!-- Score + Profile cards -->
+<div class="panel-row" style="margin:0 auto;">
+<!-- Risk gauge card -->
+<div class="panel">
+<div class="panel-header"><h2>Risk Score</h2></div>
+<div class="panel-body" style="display:flex;flex-direction:column;align-items:center;gap:0.75rem;padding:1.5rem;">
+<div id="gaugeRing" class="gauge-ring">
+<span id="gaugeValue" class="gauge-value">—</span>
+</div>
+<div id="riskLevel" style="font-size:1.1rem;font-weight:500;"></div>
+<div style="font-size:0.75rem;color:#6b7280;">10 is the safest, 80 is the riskiest</div>
+</div>
+</div>
+
+<!-- Operating profile card -->
+<div class="panel">
+<div class="panel-header"><h2>Where and When You Drive</h2></div>
+<div class="panel-body">
+<div class="detail-grid">
+<div class="detail-item">
+<div class="detail-label">Your Areas</div>
+<div class="detail-value" id="profZones">—</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Hours You Work</div>
+<div class="detail-value" id="profHours">—</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">Trips We Checked</div>
+<div class="detail-value accent" id="profTrips">—</div>
+</div>
+<div class="detail-item">
+<div class="detail-label">How We Did It</div>
+<div class="detail-value" id="profMethod" style="font-size:0.8rem;">—</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Explanation panel -->
+<div class="panel" style="margin:0 auto;">
+<div class="panel-header"><h2>How We Worked Out Your Score</h2></div>
+<div class="panel-body">
+<pre id="explanationText" style="white-space:pre-wrap;font-size:0.82rem;color:#d1d5db;line-height:1.7;font-family:inherit;"></pre>
+</div>
+</div>
+
+</section>
 </main>
+
 <footer class="site-footer">
 <div class="footer-inner">
 <span>Insurtech</span>
 <span>Group 7</span>
 </div>
 </footer>
+<script src="drivers.js"></script>
 </body>
 </html>

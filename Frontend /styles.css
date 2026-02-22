@@ -91,15 +91,19 @@ gap: 1.75rem;
 }
 
 .hero-title {
-font-size: clamp(2.2rem, 3vw, 2.8rem);
-line-height: 1.1;
+font-size: clamp(3.5rem, 6vw, 5rem);
+line-height: 1.05;
+letter-spacing: -0.03em;
 color: #f9fafb;
 }
 
 .hero-subtitle {
-color: #9ca3af;
-font-size: 0.98rem;
-max-width: 32rem;
+color: #e2e8f0;
+font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+font-weight: 700;
+line-height: 1.2;
+letter-spacing: -0.02em;
+max-width: 52rem;
 }
 
 .hero-actions {
@@ -116,9 +120,8 @@ padding: 0.8rem 1.6rem;
 border-radius: 999px;
 font-size: 0.95rem;
 font-weight: 500;
-background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-color: #0b1120;
-box-shadow: 0 10px 40px rgba(56, 189, 248, 0.35);
+background: linear-gradient(135deg, #1e40af, #2563eb);
+color: #e2e8f0;
 }
 
 .primary-btn:hover {
@@ -137,55 +140,10 @@ color: #6b7280;
 padding: 0.4rem 0.8rem;
 border-radius: 999px;
 border: 1px solid #1f2937;
-background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.15), transparent), #020617;
+background: #020617;
 }
 
-.hero-panel {
-border-radius: 1.25rem;
-border: 1px solid #1f2937;
-background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.12), transparent), #020617;
-box-shadow: 0 24px 60px rgba(15, 23, 42, 0.85);
-padding: 1.5rem 1.5rem 1.3rem;
-display: flex;
-flex-direction: column;
-gap: 1.25rem;
-}
 
-.hero-panel-header {
-font-size: 0.85rem;
-letter-spacing: 0.14em;
-text-transform: uppercase;
-color: #9ca3af;
-}
-
-.hero-metrics {
-display: grid;
-grid-template-columns: repeat(3, minmax(0, 1fr));
-gap: 1rem;
-}
-
-.hero-metric-label {
-font-size: 0.75rem;
-color: #9ca3af;
-}
-
-.hero-metric-value {
-font-size: 1.4rem;
-font-weight: 500;
-color: #e5e7eb;
-margin-top: 0.35rem;
-}
-
-.hero-metric-value.accent {
-color: #38bdf8;
-}
-
-.hero-panel-footnote {
-margin-top: 0.5rem;
-font-size: 0.75rem;
-color: #6b7280;
-max-width: 20rem;
-}
 
 .site-footer {
 border-top: 1px solid #111827;
@@ -205,8 +163,9 @@ color: #4b5563;
 
 .dashboard-main {
 flex: 1;
-padding: 1.5rem;
-max-width: 1200px;
+padding: 1.5rem 3rem;
+max-width: 1600px;
+width: 100%;
 margin: 0 auto;
 display: flex;
 flex-direction: column;
@@ -220,15 +179,10 @@ gap: 1.5rem;
 align-items: stretch;
 }
 
-.map-row {
-grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
-}
-
 .panel {
 border-radius: 1rem;
 border: 1px solid #1f2937;
-background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.95));
-box-shadow: 0 20px 50px rgba(15, 23, 42, 0.85);
+background: rgba(15, 23, 42, 0.95);
 display: flex;
 flex-direction: column;
 }
@@ -290,7 +244,7 @@ padding: 1rem 1.1rem 1.1rem;
 .kpi-card {
 border-radius: 0.9rem;
 border: 1px solid #1f2937;
-background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.1), rgba(15, 23, 42, 0.95));
+background: rgba(15, 23, 42, 0.95);
 padding: 0.9rem 1rem;
 display: flex;
 flex-direction: column;
@@ -318,7 +272,7 @@ height: 260px;
 }
 
 
-/* Compact density chart: keep small and avoid stretching */
+/* Small density chart styling */
 .density-panel {
   align-self: start;
 }
@@ -352,33 +306,6 @@ accent-color: #38bdf8;
 .slider-value {
 font-variant-numeric: tabular-nums;
 color: #e5e7eb;
-}
-
-.map-shell {
-position: relative;
-height: 340px;
-}
-
-.map-view {
-height: 100%;
-border-radius: 0 0 1rem 1rem;
-overflow: hidden;
-}
-
-.map-fallback {
-position: absolute;
-inset: 0;
-display: flex;
-align-items: center;
-justify-content: center;
-padding: 1rem;
-font-size: 0.8rem;
-color: #6b7280;
-background: rgba(15, 23, 42, 0.96);
-}
-
-.map-fallback.hidden {
-display: none;
 }
 
 .detail-panel .detail-body {
@@ -471,17 +398,12 @@ color: #38bdf8;
 grid-template-columns: minmax(0, 1fr);
 }
 
-.panel-row,
-.map-row {
+.panel-row {
 grid-template-columns: minmax(0, 1fr);
 }
 
 .kpi-grid {
 grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.map-shell {
-height: 260px;
 }
 }
 
@@ -510,4 +432,67 @@ grid-template-columns: minmax(0, 1fr);
 flex-direction: column;
 align-items: flex-start;
 }
+}
+
+/* Driver risk form */
+.form-group {
+  margin-bottom: 0.9rem;
+}
+.form-label {
+  display: block;
+  font-size: 0.78rem;
+  color: #9ca3af;
+  margin-bottom: 0.3rem;
+}
+.form-input {
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border-radius: 0.6rem;
+  border: 1px solid #1f2937;
+  background: #0f172a;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus {
+  border-color: #38bdf8;
+}
+.form-error {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.5rem;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid #7f1d1d;
+  color: #fca5a5;
+  font-size: 0.82rem;
+}
+.hidden {
+  display: none !important;
+}
+
+/* Risk gauge circle */
+.gauge-ring {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: conic-gradient(#1f2937 0deg, #1f2937 360deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.gauge-ring::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: #020617;
+}
+.gauge-value {
+  position: relative;
+  z-index: 1;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #e5e7eb;
 }

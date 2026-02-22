@@ -54,31 +54,17 @@ setText("kpi-revenue-volatility", formatDecimal(data.revenue_volatility_score));
 }
 
 async function loadHourlyDensitySeries() {
-const hours = [];
-const counts = [];
-for (let h = 0; h < 24; h++) {
-hours.push(h);
-counts.push(0);
-}
-for (let h = 0; h < 24; h++) {
 try {
-const res = await fetch("/api/map?hour=" + h);
+const res = await fetch("/api/hourly_density");
 if (!res.ok) {
-continue;
+return;
 }
 const data = await res.json();
-let total = 0;
-for (let i = 0; i < data.length; i++) {
-const v = Number(data[i].trip_count || 0);
-if (!isNaN(v)) {
-total = total + v;
-}
-}
-counts[h] = total;
+const hours = data.map(d => d.hour);
+const counts = data.map(d => d.total_trips);
+renderDensityChart(hours, counts);
 } catch (e) {
 }
-}
-renderDensityChart(hours, counts);
 }
 
 function renderDensityChart(hours, counts) {
@@ -181,50 +167,8 @@ fallback.classList.remove("hidden");
 }
 
 async function loadMapForHour(hour) {
-if (!map) {
+// Map was removed, nothing to do
 return;
-}
-try {
-const res = await fetch("/api/map?hour=" + hour);
-if (!res.ok) {
-return;
-}
-const data = await res.json();
-zoneMetricsById.clear();
-for (let i = 0; i < data.length; i++) {
-const zone = data[i];
-if (zone && zone.zone_id != null) {
-zoneMetricsById.set(String(zone.zone_id), zone);
-}
-}
-if (mapLayer) {
-map.removeLayer(mapLayer);
-mapLayer = null;
-}
-if (geojsonData) {
-mapLayer = L.geoJSON(geojsonData, {
-style: feature => {
-const zoneId = String(feature.properties.zone_id);
-const metrics = zoneMetricsById.get(zoneId);
-const risk = metrics ? Number(metrics.risk_score || 0) : 0;
-return {
-color: "#020617",
-weight: 0.4,
-fillColor: colorForRisk(risk),
-fillOpacity: metrics ? 0.85 : 0.15
-};
-},
-onEachFeature: (feature, layer) => {
-const zoneId = String(feature.properties.zone_id);
-layer.on("click", () => {
-handleZoneSelection(zoneId);
-});
-}
-}).addTo(map);
-}
-renderTopZonesTableFromMap();
-} catch (e) {
-}
 }
 
 function colorForRisk(score) {
