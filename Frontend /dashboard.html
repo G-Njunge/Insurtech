@@ -12,11 +12,11 @@
 <div class="top-bar-inner">
 <div class="logo-mark">Insurtech</div>
 <nav class="top-nav">
-<a href="index.html" class="top-link">Overview</a>
+<a href="index.html" class="top-link">Home</a>
 <span class="top-link active">Dashboard</span>
-<a href="density.html" class="top-link">Density</a>
 <a href="revenue.html" class="top-link">Revenue</a>
 <a href="map.html" class="top-link">Map</a>
+<a href="drivers.html" class="top-link">Demo</a>
 </nav>
 </div>
 </header>
@@ -48,6 +48,17 @@
 <div class="kpi-value" id="kpi-revenue-volatility">–</div>
 <div class="kpi-caption">Portfolio-level volatility proxy</div>
 </div>
+</div>
+</div>
+<div class="panel chart-panel density-panel">
+<div class="panel-header">
+<h2>Hourly Trip Density</h2>
+<span class="panel-tag">/api/map?hour=0..23</span>
+<span></span>
+</div>
+<div class="panel-body">
+<canvas id="densityChart"></canvas>
+<div class="panel-footnote">Sum of hourly trip_count across all zones.</div>
 </div>
 </div>
 <div class="panel table-panel">
