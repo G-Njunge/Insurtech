@@ -126,4 +126,24 @@ def load_trips(conn, batch_size=500):
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
 
+  batch = []
+    total = 0
+    skipped = 0
+
+    with open(TRIP_CSV, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+
+        for i, r in enumerate(reader, 1):
+            try:
+                batch.append((
+                    int(r['VendorID']),
+                    r['tpep_pickup_datetime'],
+                    r['tpep_dropoff_datetime'],
+                    int(r['passenger_count']) if r['passenger_count'] else None,
+                    float(r['trip_distance']) if r['trip_distance'] else None,
+                    int(r['PULocationID']),
+                    int(r['DOLocationID']),
+                    float(r['fare_amount']) if r['fare_amount'] else None,
+                    float(r['total_amount']) if r['total_amount'] else None,
+                ))
 
