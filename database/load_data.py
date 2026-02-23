@@ -85,4 +85,23 @@ def load_locations(conn):
             service = r['service_zone']
             zones_seen[zname] = (borough, service)
 
+    for zname, (borough, service) in zones_seen.items():
+        cur.execute(
+            "INSERT INTO zone (zone_name, borough, service_zone) VALUES (%s, %s, %s)",
+            (zname, borough, service)
+        )
+    conn.commit()
+
+    # Make a quick lookup so we can match zone names to their IDs
+    cur.execute("SELECT zone_id, zone_name FROM zone")
+    zone_map = {name: zid for zid, name in cur.fetchall()}
+
+    # Now load all the locations
+    for r in rows:
+        loc_id = int(r['LocationID'])
+        borough = r['Borough']
+        zone_name = r['Zone']
+        service = r['service_zone']
+        zone_id = zone_map.get(zone_name)
+
 
