@@ -159,4 +159,26 @@ def load_trips(conn, batch_size=500):
                 batch = []
                 print(f"  {total} trips inserted...")
 
+   if batch:
+        cur.executemany(insert_sql, batch)
+        conn.commit()
+        total += len(batch)
+
+    cur.close()
+    msg = f"[3/3] Loaded {total} trips from cleaned_yellow_trips.csv"
+    if skipped:
+        msg += f"  ({skipped} rows skipped)"
+    print(msg)
+
+
+def main():
+    print("Insurtech Data Loader")
+    print()
+
+    # Make sure the CSV files are there before we start
+    for label, path in [('Location CSV', LOCATION_CSV), ('Trip CSV', TRIP_CSV)]:
+        if not os.path.exists(path):
+            print(f"ERROR: {label} not found at {path}")
+            return
+        
 
