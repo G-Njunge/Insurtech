@@ -68,4 +68,21 @@ cur.execute("""
     cur.close()
     print("[1/3] Tables created (zone, location, trip)")
 
+def load_locations(conn):
+    # Read locations.csv and fill the zone and location tables
+    cur = conn.cursor()
+
+    with open(LOCATION_CSV, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+
+    # Get each unique zone (no duplicates)
+    zones_seen = {}
+    for r in rows:
+        zname = r['Zone']
+        if zname not in zones_seen:
+            borough = r['Borough']
+            service = r['service_zone']
+            zones_seen[zname] = (borough, service)
+
 
