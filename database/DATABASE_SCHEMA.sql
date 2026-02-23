@@ -58,5 +58,20 @@ CREATE TABLE user (
 ) ENGINE=InnoDB;
 
 
+-- 5. Driver Operations (748 rows)
+-- Shows how many trips each driver made in each zone at each hour
+CREATE TABLE driver_operations (
+    id               INT            NOT NULL AUTO_INCREMENT,
+    driver_id        INT            NOT NULL,
+    zone_id          INT            NOT NULL,
+    hour             INT            NOT NULL,
+    trips_in_period  INT            DEFAULT 0,
+    avg_risk_in_zone DECIMAL(10,4)  DEFAULT 0.0000,
+    PRIMARY KEY (id),
+    INDEX idx_driver (driver_id),
+    FOREIGN KEY (driver_id) REFERENCES user(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+
 
 
