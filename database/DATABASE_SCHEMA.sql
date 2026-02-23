@@ -122,5 +122,22 @@ CREATE TABLE zone_hourly_risk (
 ) ENGINE=InnoDB;
 
 
+-- 9. Zone Hourly Details (1200 rows)
+-- Full breakdown per zone per hour, used when you click into a zone
+CREATE TABLE zone_hourly_details (
+    zone_id             INT            NOT NULL,
+    hour                INT            NOT NULL,
+    zone_name           VARCHAR(100)   DEFAULT NULL,
+    trip_count          INT            DEFAULT 0,
+    avg_trip_duration   DECIMAL(8,2)   DEFAULT NULL,
+    exposure_index      DECIMAL(5,2)   DEFAULT NULL,
+    revenue_volatility  DECIMAL(5,2)   DEFAULT NULL,
+    stability_score     DECIMAL(5,2)   DEFAULT NULL,
+    risk_score          DECIMAL(5,2)   DEFAULT NULL,
+    PRIMARY KEY (zone_id, hour),
+    FOREIGN KEY (zone_id) REFERENCES zone(zone_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+
 
 
