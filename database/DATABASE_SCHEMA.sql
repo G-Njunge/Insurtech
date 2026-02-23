@@ -87,5 +87,26 @@ CREATE TABLE overview_metrics (
 ) ENGINE=InnoDB;
 
 
+-- 7. Zone Hourly Metrics (1200 rows)
+-- The main analytics table with one row per zone per hour
+-- Has trip counts, exposure, congestion, fare swings, and risk scores
+CREATE TABLE zone_hourly_metrics (
+    zone_id             INT            NOT NULL,
+    hour                INT            NOT NULL,
+    trip_count          INT            DEFAULT 0,
+    exposure_index      DECIMAL(10,2)  DEFAULT NULL,
+    avg_trip_duration   DECIMAL(10,2)  DEFAULT NULL,
+    congestion_index    DECIMAL(10,2)  DEFAULT NULL,
+    revenue_volatility  DECIMAL(10,2)  DEFAULT NULL,
+    risk_score          DECIMAL(10,2)  DEFAULT NULL,
+    zone_name           VARCHAR(100)   DEFAULT NULL,
+    PRIMARY KEY (zone_id, hour),
+    INDEX idx_hour (hour),
+    INDEX idx_zone (zone_id),
+    INDEX idx_risk (risk_score),
+    FOREIGN KEY (zone_id) REFERENCES zone(zone_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+
 
 
