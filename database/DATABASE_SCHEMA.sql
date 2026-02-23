@@ -49,4 +49,14 @@ CREATE TABLE trip (
 ) ENGINE=InnoDB;
 
 
+-- 4. User (93 rows)
+-- Made-up driver profiles built from unique vendor + pickup location combos
+CREATE TABLE user (
+    user_id    INT            NOT NULL,
+    user_name  VARCHAR(100)   NOT NULL,
+    PRIMARY KEY (user_id)
+) ENGINE=InnoDB;
+
+
+
 
