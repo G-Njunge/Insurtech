@@ -1,2 +1,0 @@
-# InsurTech Taxi Risk Model - Python 3.8+
-# Core libs only; DB is SQLite (stdlib), no pandas required for scripts.
