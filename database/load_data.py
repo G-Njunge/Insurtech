@@ -104,4 +104,14 @@ def load_locations(conn):
         service = r['service_zone']
         zone_id = zone_map.get(zone_name)
 
+ cur.execute(
+            "INSERT INTO location (loc_id, borough, zone_name, service_zone, zone_id) "
+            "VALUES (%s, %s, %s, %s, %s)",
+            (loc_id, borough, zone_name, service, zone_id)
+        )
+
+    conn.commit()
+    cur.close()
+    print(f"[2/3] Loaded {len(zones_seen)} zones and {len(rows)} locations from locations.csv")
+
 
