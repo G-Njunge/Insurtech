@@ -34,4 +34,15 @@ def create_tables(conn):
         ) ENGINE=InnoDB;
     """)
 
+ cur.execute("""
+        CREATE TABLE location (
+            loc_id        INT          NOT NULL,
+            borough       VARCHAR(50)  DEFAULT NULL,
+            zone_name     VARCHAR(100) DEFAULT NULL,
+            service_zone  VARCHAR(50)  DEFAULT NULL,
+            zone_id       INT          DEFAULT NULL,
+            PRIMARY KEY (loc_id)
+        ) ENGINE=InnoDB;
+    """)
+
 
