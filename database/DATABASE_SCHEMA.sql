@@ -139,5 +139,17 @@ CREATE TABLE zone_hourly_details (
 ) ENGINE=InnoDB;
 
 
-
+-- How the tables connect to each other
+--
+-- zone has many locations, metrics, risk rows, and details
+-- location has many trips (through pickup and dropoff IDs)
+-- user has many driver_operations
+-- overview_metrics is just one row on its own
+--
+-- Which API uses which table
+--
+-- GET  /api/overview          reads overview_metrics
+-- GET  /api/zone/<id>         reads zone_hourly_details
+-- GET  /api/top_zones?hour=H  reads zone_hourly_metrics
+-- POST /api/driver-risk       reads user + driver_operations
 
