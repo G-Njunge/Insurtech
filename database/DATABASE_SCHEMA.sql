@@ -108,5 +108,19 @@ CREATE TABLE zone_hourly_metrics (
 ) ENGINE=InnoDB;
 
 
+-- 8. Zone Hourly Risk (1200 rows)
+-- Smaller version of metrics table, just risk scores and trip counts
+CREATE TABLE zone_hourly_risk (
+    zone_id     INT            NOT NULL,
+    hour        INT            NOT NULL,
+    risk_score  DECIMAL(10,2)  DEFAULT NULL,
+    trip_count  INT            DEFAULT 0,
+    zone_name   VARCHAR(100)   DEFAULT NULL,
+    PRIMARY KEY (zone_id, hour),
+    INDEX idx_hour (hour),
+    FOREIGN KEY (zone_id) REFERENCES zone(zone_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+
 
 
