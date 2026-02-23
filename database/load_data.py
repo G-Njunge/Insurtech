@@ -115,3 +115,15 @@ def load_locations(conn):
     print(f"[2/3] Loaded {len(zones_seen)} zones and {len(rows)} locations from locations.csv")
 
 
+def load_trips(conn, batch_size=500):
+    # Read the trips CSV and load them into the trip table in batches
+    cur = conn.cursor()
+
+    insert_sql = """
+        INSERT INTO trip
+            (vendor_id, pickup_time, dropoff_time, passenger_count, trip_distance,
+             pickup_location_id, dropoff_location_id, fare_amount, total_amount)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+
+
