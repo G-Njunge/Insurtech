@@ -7,7 +7,7 @@ import csv
 # Figure out where this file is so we can find other project files
 DATABASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(DATABASE_DIR)
-sys.path.insert(0, os.path.join(PROJECT_ROOT, 'dsa'))
+sys.path.insert(0, os.path.join(PROJECT_ROOT, 'api'))
 from database_config import get_connection
 
 LOCATION_CSV = os.path.join(PROJECT_ROOT, 'data', 'locations.csv')
