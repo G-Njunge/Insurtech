@@ -146,4 +146,17 @@ def load_trips(conn, batch_size=500):
                     float(r['fare_amount']) if r['fare_amount'] else None,
                     float(r['total_amount']) if r['total_amount'] else None,
                 ))
+ except (ValueError, KeyError) as e:
+                skipped += 1
+                if skipped <= 5:
+                    print(f"  Warning: row {i} skipped – {e}")
+                continue
+
+            if len(batch) >= batch_size:
+                cur.executemany(insert_sql, batch)
+                conn.commit()
+                total += len(batch)
+                batch = []
+                print(f"  {total} trips inserted...")
+
 
