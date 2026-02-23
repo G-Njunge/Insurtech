@@ -181,4 +181,26 @@ def main():
             print(f"ERROR: {label} not found at {path}")
             return
         
+ conn = get_connection()
+    if not conn:
+        print("ERROR: Could not connect to database")
+        return
+
+    try:
+        create_tables(conn)
+        load_locations(conn)
+        load_trips(conn)
+        print("\nDone – all data loaded successfully.")
+    except Exception as e:
+        print(f"ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+    finally:
+        conn.close()
+
+
+if __name__ == "__main__":
+    main()
+
+
 
