@@ -45,4 +45,27 @@ def create_tables(conn):
         ) ENGINE=InnoDB;
     """)
 
+cur.execute("""
+        CREATE TABLE trip (
+            trip_id              INT           NOT NULL AUTO_INCREMENT,
+            vendor_id            INT           DEFAULT NULL,
+            pickup_time          DATETIME      NOT NULL,
+            dropoff_time         DATETIME      NOT NULL,
+            passenger_count      INT           DEFAULT NULL,
+            trip_distance        DECIMAL(10,2) DEFAULT NULL,
+            pickup_location_id   INT           DEFAULT NULL,
+            dropoff_location_id  INT           DEFAULT NULL,
+            fare_amount          DECIMAL(10,2) DEFAULT NULL,
+            total_amount         DECIMAL(10,2) DEFAULT NULL,
+            PRIMARY KEY (trip_id),
+            INDEX idx_pickup_time (pickup_time),
+            INDEX idx_pickup_loc  (pickup_location_id),
+            INDEX idx_dropoff_loc (dropoff_location_id)
+        ) ENGINE=InnoDB;
+    """)
+
+   conn.commit()
+    cur.close()
+    print("[1/3] Tables created (zone, location, trip)")
+
 
