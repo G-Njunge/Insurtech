@@ -73,5 +73,19 @@ CREATE TABLE driver_operations (
 ) ENGINE=InnoDB;
 
 
+-- 6. Overview Metrics (1 row)
+-- One row with the big picture numbers for the dashboard
+CREATE TABLE overview_metrics (
+    id                      INT            NOT NULL,
+    total_trips             INT            DEFAULT NULL,
+    high_risk_zones         INT            DEFAULT NULL,
+    peak_exposure_hour      INT            DEFAULT NULL,
+    avg_revenue_volatility  DECIMAL(5,2)   DEFAULT NULL,
+    last_updated            TIMESTAMP      DEFAULT CURRENT_TIMESTAMP
+                                           ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+
 
 
