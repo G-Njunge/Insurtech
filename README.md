@@ -10,6 +10,7 @@ Built by Group 7.
 
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
+- [Data Processing and Cleaning](#data-processing-and-cleaning)
 - [Database Setup](#database-setup)
 - [Python Environment Setup](#python-environment-setup)
 - [Loading Data](#loading-data)
@@ -95,6 +96,36 @@ database="nyc_taxi_temp"
 ```
 
 
+## Data Processing and Cleaning
+
+Before loading data, the raw trip records go through a comprehensive cleaning pipeline (`database/data_cleaning.py`) that:
+- Validates data against domain constraints (valid zones, realistic distances/fares, reasonable passenger counts)
+- Handles missing values (excludes critical fields, imputes non-critical ones with median)
+- Detects and removes exact duplicates (using composite key: pickup_time, dropoff_time, locations, fare)
+- Normalizes all formats (ISO 8601 timestamps, 2-decimal precision for amounts, proper data types)
+- Logs every exclusion with reasoning (JSON log + human-readable report)
+
+**Quality checks performed:**
+- Location IDs: 1-263 (valid NYC zones)
+- Trip distance: 0.1-100 miles
+- Fare amount: $2.50-$500
+- Passenger count: 1-6
+- Trip duration: 1 minute to 8 hours
+- No future timestamps
+
+**To run the cleaning pipeline:**
+```bash
+python database/data_cleaning.py
+```
+
+This generates:
+- `yellow_trips_cleaned.csv` - Cleaned data ready for database load
+- `data_cleaning_log.json` - Detailed log of all exclusions (machine-readable)
+- `data_cleaning_report.txt` - Human-readable summary with statistics
+
+**Expected result:** ~97% data retention (55 records excluded from ~1,705 due to data quality issues)
+
+
 ## Python Environment Setup
 
 1. Clone the repository and navigate into it:
@@ -118,33 +149,83 @@ Activate it:
 3. Install the required Python packages:
 
 ```
-pip install flask mysql-connector-python pandas
+pip install flask mysql-connector-python pandas numpy
 ```
 
-That is the complete list of dependencies. There is no requirements.txt because only three packages are needed.
+
+## Database Setup
+
+1. Open a MySQL shell as root:
+
+```
+mysql -u root -p
+```
+
+2. Create the database:
+
+```sql
+CREATE DATABASE nyc_taxi_temp;
+```
+
+3. Create a dedicated application user:
+
+```sql
+CREATE USER 'trials_user'@'localhost' IDENTIFIED WITH mysql_native_password BY 'trials_pass';
+GRANT ALL PRIVILEGES ON nyc_taxi_temp.* TO 'trials_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+4. Exit the MySQL shell:
+
+```sql
+EXIT;
+```
+
+If you want to use different credentials, edit the values in `api/database_config.py`:
+
+```python
+host="127.0.0.1"
+user="trials_user"
+password="trials_pass"
+database="nyc_taxi_temp"
+```
 
 
 ## Loading Data
 
-Run the following three scripts in order from the project root directory. Each script resolves its own paths automatically, so you can run them from any working directory as long as you reference the correct path.
+Run the following scripts in order from the project root directory to populate the database.
 
-Step 1: Create the base tables (zone, location, trip) and load data from CSVs.
+**Step 0 (Optional but Recommended): Clean the raw data**
+
+```
+python database/data_cleaning.py
+```
+
+This optional step runs the data cleaning pipeline before database load. It generates a detailed cleaning report showing how many records were excluded and why. The script:
+- Validates all data quality thresholds (distance, fare, location, passenger count, etc.)
+- Detects and removes duplicates and anomalies
+- Normalizes timestamps and numeric fields
+- Produces: `data/data_cleaning_log.json` (detailed log) and `data/data_cleaning_report.txt` (summary)
+
+This step is useful for demonstrating the data cleaning process described in the rubric, though the pre-cleaned CSV already has high data quality.
+
+**Step 1: Create base tables and load data**
 
 ```
 python database/load_data.py
 ```
 
-This reads `data/locations.csv` and `data/cleaned_yellow_trips.csv`, creates the zone, location, and trip tables, and inserts all records. Expected output: 50 zones, 50 locations, 1705 trips.
+This reads `data/locations.csv` and `data/cleaned_yellow_trips.csv`, creates the zone, location, and trip tables, and inserts all records. Expected output: 50 zones, 50 locations, 1,705 trips.
 
-Step 2: Compute all precomputed metric tables from the raw trip data.
+**Step 2: Compute precomputed metric tables**
 
 ```
 python database/populate_precomputed_tables.py
 ```
 
-This creates and populates zone_hourly_metrics, zone_hourly_risk, zone_hourly_details, and overview_metrics. It computes trip density, exposure index, congestion index, revenue volatility, and composite risk scores for every zone-hour combination (1200 records: 50 zones x 24 hours).
+This creates and populates zone_hourly_metrics, zone_hourly_risk, zone_hourly_details, and overview_metrics. It computes trip density, exposure index, congestion index, revenue volatility, and composite risk scores for every zone-hour combination (1,200 records: 50 zones × 24 hours).
 
-Step 3: Seed driver profiles and their operating records.
+**Step 3: Seed driver profiles**
 
 ```
 python database/seed_drivers.py
@@ -152,7 +233,7 @@ python database/seed_drivers.py
 
 This analyzes the trip table to find unique (vendor_id, pickup_location_id) combinations, creates 93 driver profiles in the user table with realistic names, and builds 748 driver_operations records linking each driver to their zones, hours, trip counts, and risk levels.
 
-After all three steps, the database will contain 9 tables with a total of approximately 5,047 records.
+After all three steps, the database will contain 9 tables with approximately 5,047 records.
 
 
 ## Starting the Server
