@@ -1,6 +1,8 @@
 # Insurtech
 Team task sheet - https://docs.google.com/spreadsheets/d/1Xokvr5Wbj971KtAKTu1TXAzik2ZTFbefU900CTHZPxE/edit?gid=0#gid=0
 
+Video demo upload :
+https://youtu.be/0uDv7UfWONs
 A risk analytics platform built on NYC yellow taxi trip data. The system loads raw trip records, computes zone-level risk metrics (exposure, congestion, revenue volatility), and serves them through a Flask API. A static frontend provides a dashboard for exploring risk by zone and hour, and a demo page where individual drivers can look up their composite risk score.
 
 Built by Group 7.
