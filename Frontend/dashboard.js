@@ -1,5 +1,4 @@
 let densityChart;
-let revenueChart;
 let map;
 let mapLayer;
 let geojsonData;
@@ -29,7 +28,6 @@ hourLabel.textContent = formatHourLabel(currentHour);
 loadOverview();
 loadHourlyDensitySeries();
 initializeMap();
-loadRevenueMetrics();
 loadTopZones(currentHour);
 }
 
@@ -106,6 +104,12 @@ intersect: false
 },
 scales: {
 x: {
+title: {
+display: true,
+text: "Hour",
+color: "#9ca3af",
+font: { size: 12 }
+},
 grid: {
 color: "rgba(31, 41, 55, 0.8)"
 },
@@ -115,6 +119,12 @@ maxRotation: 0
 }
 },
 y: {
+title: {
+display: true,
+text: "No. of Trips",
+color: "#9ca3af",
+font: { size: 12 }
+},
 grid: {
 color: "rgba(31, 41, 55, 0.8)"
 },
@@ -297,91 +307,7 @@ setText("detail-risk-score", formatDecimal(data.risk_score));
 }
 }
 
-async function loadRevenueMetrics() {
-try {
-const res = await fetch("/api/revenue");
-if (!res.ok) {
-return;
-}
-const data = await res.json();
-const labels = [];
-const volatility = [];
-const stability = [];
-for (let i = 0; i < data.length; i++) {
-const item = data[i];
-labels.push(item.zone_name || item.zone_id);
-volatility.push(Number(item.revenue_volatility || 0));
-stability.push(Number(item.stability_score || 0));
-}
-renderRevenueChart(labels, volatility, stability);
-} catch (e) {
-}
-}
 
-function renderRevenueChart(labels, volatility, stability) {
-const ctx = document.getElementById("revenueChart");
-if (!ctx) {
-return;
-}
-if (revenueChart) {
-revenueChart.destroy();
-}
-revenueChart = new Chart(ctx, {
-type: "bar",
-data: {
-labels,
-datasets: [
-{
-label: "Volatility",
-data: volatility,
-backgroundColor: "rgba(248, 113, 113, 0.8)"
-},
-{
-label: "Stability",
-data: stability,
-backgroundColor: "rgba(52, 211, 153, 0.9)"
-}
-]
-},
-options: {
-responsive: true,
-maintainAspectRatio: false,
-plugins: {
-legend: {
-labels: {
-color: "#9ca3af",
-font: {
-size: 10
-}
-}
-}
-},
-scales: {
-x: {
-grid: {
-display: false
-},
-ticks: {
-color: "#9ca3af",
-maxRotation: 45,
-minRotation: 0,
-autoSkip: true,
-maxTicksLimit: 8
-}
-},
-y: {
-grid: {
-color: "rgba(31, 41, 55, 0.8)"
-},
-ticks: {
-color: "#9ca3af",
-callback: value => formatCompact(value)
-}
-}
-}
-}
-});
-}
 
 function setText(id, value) {
 const el = document.getElementById(id);
